@@ -172,6 +172,8 @@ $routePrefix = function($route) {
       box-shadow: 4px 0 30px rgba(102, 126, 234, 0.4);
       overflow-x: hidden;
       position: relative;
+      width: 245px !important;
+      min-width: 245px !important;
   }
 
   #accordionSidebar::before {
@@ -207,6 +209,7 @@ $routePrefix = function($route) {
     padding: 1rem;
     text-align: center;
     width: 4.5rem;
+    justify-content: center !important; /* Ensure perfect centering */
 }
 
 #accordionSidebar.toggled .nav-item .nav-link span {
@@ -217,6 +220,7 @@ $routePrefix = function($route) {
     font-size: 1.2rem;
     margin: 0;
     width: auto;
+    color: rgba(255, 255, 255, 0.95) !important; /* Ensure icons are visible */
 }
 
 #accordionSidebar.toggled .collapse {
@@ -321,7 +325,7 @@ $routePrefix = function($route) {
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), inset 0 1px 3px rgba(255, 255, 255, 0.8);
       margin: 0.5rem 1rem;
-      min-width: 200px; /* Adjust this value based on your longest text */
+      min-width: 200px;
       max-width: 100%;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.5);
@@ -453,18 +457,5 @@ $routePrefix = function($route) {
       animation: pulse 3s ease-in-out infinite;
   }
 
-  .collapse-item {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-    margin: 0 0.5rem;
-    border-radius: 0.35rem;
-}
-
-
 </style>
-
 
