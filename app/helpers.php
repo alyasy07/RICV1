@@ -3,23 +3,13 @@
 if (!function_exists('userRoute')) {
     /**
      * Generate route name based on user's role
+     * Admin-only system - all routes use admin prefix
      *
      * @param string $routeName
      * @return string
      */
     function userRoute($routeName)
     {
-        $user = auth()->user();
-        if (!$user) {
-            return 'admin.' . $routeName;
-        }
-
-        $prefix = match($user->role) {
-            'Pka' => 'pka.',
-            'Admin' => 'admin.',
-            default => 'admin.'
-        };
-
-        return $prefix . $routeName;
+        return 'admin.' . $routeName;
     }
 }

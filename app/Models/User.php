@@ -68,8 +68,6 @@ class User extends Model implements Authenticatable, CanResetPassword
     {
         $roleNames = [
             'Admin' => 'Admin',
-            'Pka' => 'Pembantu Khidmat Am',
-            'pka' => 'Pembantu Khidmat Am',
         ];
 
         return $roleNames[$this->role] ?? $this->role;

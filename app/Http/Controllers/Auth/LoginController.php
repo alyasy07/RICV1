@@ -105,15 +105,9 @@ class LoginController extends Controller
             case 'Admin':
                 \Log::info('Redirecting to admin dashboard');
                 return redirect()->intended(route('admin.dashboard'));
-            case 'Pka':
-                \Log::info('Redirecting to pka dashboard');
-                return redirect()->intended(route('pka.dashboard'));
-            case 'Staff':
-                \Log::info('Redirecting to staff dashboard');
-                return redirect()->intended(route('staff.dashboard'));
             default:
-                \Log::info('Redirecting to home');
-                return redirect()->intended('/home');
+                \Log::info('Redirecting to admin dashboard for unknown role');
+                return redirect()->intended(route('admin.dashboard'));
         }
     }
 
