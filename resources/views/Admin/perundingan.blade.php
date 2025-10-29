@@ -10,6 +10,7 @@ $routePrefix = function($route) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/bulat_logo2.png') }}">
     <title>Perundingan – {{ config('app.name') }}</title>
 
     <!-- Vendor CSS -->

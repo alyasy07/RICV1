@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/logo.jpg') }}">
+    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/bulat_logo2.png') }}">
     <title>{{ config('app.name') }} - Sistem Pengurusan Laporan</title>
     
     <style>
@@ -247,7 +247,7 @@
     <div class="main-container">
         <div class="content">
             <h1 class="main-title">SISTEM PENGURUSAN LAPORAN</h1>
-            <p class="subtitle">KETERANGAN WEBSITE</p>
+            <p class="subtitle">Portal khas untuk Pengurusan Laporan dan Permohonan Penyelidikan GERIC</p>
             <a href="{{ route('login') }}" class="login-btn">Log Masuk</a>
         </div>
     </div>
