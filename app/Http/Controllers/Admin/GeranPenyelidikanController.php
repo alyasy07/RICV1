@@ -23,41 +23,52 @@ class GeranPenyelidikanController extends Controller
      */
     public function getData(Request $request)
     {
-        $query = GeranPenyelidikan::query();
+        try {
+            $query = GeranPenyelidikan::query();
 
-        // Filter by date range if provided
-        if ($request->has('date_from') && $request->date_from != '') {
-            $query->whereDate('tarikh_tutup_permohonan', '>=', $request->date_from);
+            // Filter by date range if provided
+            if ($request->has('date_from') && $request->date_from != '') {
+                $query->whereDate('tarikh_tutup_permohonan', '>=', $request->date_from);
+            }
+
+            if ($request->has('date_to') && $request->date_to != '') {
+                $query->whereDate('tarikh_tutup_permohonan', '<=', $request->date_to);
+            }
+
+            return DataTables::of($query)
+                ->addColumn('nama_penyelidik', function ($row) {
+                    return $row->nama_ketua_penyelidik;
+                })
+                ->addColumn('action_buttons', function ($row) {
+                    $viewBtn = '<button class="btn btn-sm btn-primary view-geran-btn" data-id="' . $row->id . '" title="Lihat Butiran">
+                        <i class="fas fa-eye"></i>
+                    </button>';
+                    $editBtn = '<button class="btn btn-sm btn-info edit-geran-btn" data-id="' . $row->id . '" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>';
+                    $deleteBtn = '<button class="btn btn-sm btn-danger delete-geran-btn" data-id="' . $row->id . '" title="Padam">
+                        <i class="fas fa-trash"></i>
+                    </button>';
+                    return $viewBtn . ' ' . $editBtn . ' ' . $deleteBtn;
+                })
+                ->editColumn('tarikh_tutup_permohonan', function ($row) {
+                    return $row->tarikh_tutup_permohonan ? $row->tarikh_tutup_permohonan->format('d/m/Y') : '-';
+                })
+                ->editColumn('jumlah_dana', function ($row) {
+                    return $row->jumlah_dana;
+                })
+                ->rawColumns(['action_buttons'])
+                ->make(true);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error in GeranPenyelidikanController@getData', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'Database error: ' . $e->getMessage()
+            ], 500);
         }
-
-        if ($request->has('date_to') && $request->date_to != '') {
-            $query->whereDate('tarikh_tutup_permohonan', '<=', $request->date_to);
-        }
-
-        return DataTables::of($query)
-            ->addColumn('nama_penyelidik', function ($row) {
-                return $row->nama_ketua_penyelidik;
-            })
-            ->addColumn('action_buttons', function ($row) {
-                $viewBtn = '<button class="btn btn-sm btn-primary view-geran-btn" data-id="' . $row->id . '" title="Lihat Butiran">
-                    <i class="fas fa-eye"></i>
-                </button>';
-                $editBtn = '<button class="btn btn-sm btn-info edit-geran-btn" data-id="' . $row->id . '" title="Edit">
-                    <i class="fas fa-edit"></i>
-                </button>';
-                $deleteBtn = '<button class="btn btn-sm btn-danger delete-geran-btn" data-id="' . $row->id . '" title="Padam">
-                    <i class="fas fa-trash"></i>
-                </button>';
-                return $viewBtn . ' ' . $editBtn . ' ' . $deleteBtn;
-            })
-            ->editColumn('tarikh_tutup_permohonan', function ($row) {
-                return $row->tarikh_tutup_permohonan ? $row->tarikh_tutup_permohonan->format('d/m/Y') : '-';
-            })
-            ->editColumn('jumlah_dana', function ($row) {
-                return $row->jumlah_dana;
-            })
-            ->rawColumns(['action_buttons'])
-            ->make(true);
     }
 
     /**

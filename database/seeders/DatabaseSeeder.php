@@ -19,5 +19,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'tyraasmd@gmail.com',
         ]);
+
+        // Seed Geran data
+        $this->call([
+            GeranPadananSeeder::class,
+            GeranIndustriSeeder::class,
+            PerundinganSeeder::class,
+            KajianKesSeeder::class,
+            MoaMouSeeder::class,
+            PenerbitanPenulisanSeeder::class,
+            GlobalAntarabangsaSeeder::class,
+        ]);
     }
 }

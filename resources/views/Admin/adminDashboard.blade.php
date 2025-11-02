@@ -114,7 +114,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.geranpenyelidikan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #C86CB7;">{{ $geranPenyelidikanLulus + $geranPenyelidikanTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #C86CB7;">{{ $geranPenyelidikanTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Geran Penyelidikan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -132,7 +132,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.geranpadanan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #fbbf24;">{{ $geranPadananLulus + $geranPadananTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #fbbf24;">{{ $geranPadananTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Geran Padanan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -150,7 +150,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.granindustri') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #ec4899;">{{ $geranIndustriLulus + $geranIndustriTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #ec4899;">{{ $geranIndustriTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Geran Industri</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -168,7 +168,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.perundingan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #10b981;">{{ $perundinganLulus + $perundinganTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #10b981;">{{ $perundinganTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Perundingan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -186,7 +186,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.kajiankes') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #6366f1;">{{ $kajianKesLulus + $kajianKesTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #6366f1;">{{ $kajianKesTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Kajian Kes</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -204,7 +204,7 @@
                         <div class="col-xl-2 col-md-4 col-sm-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.moamou') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #f97316;">{{ $moaMouLulus + $moaMouTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #f97316;">{{ $moaMouTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">MoA/MoU</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Lulus</span>
@@ -225,14 +225,14 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.globalantarabangsa') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #6366f1;">{{ $globalAntarabangsaSelesai + $globalAntarabangsaTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #6366f1;">{{ $globalAntarabangsaTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Global dan Pengantarabangsaan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Selesai</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $globalAntarabangsaSelesai }}</span>
                                     </div>
                                     <div>
-                                        <span class="text-muted small">Tidak Berjaya</span>
+                                        <span class="text-muted small">Dalam Tindakan</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $globalAntarabangsaTidakBerjaya }}</span>
                                     </div>
                                 </div>
@@ -243,14 +243,14 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.penerbitanpenulisan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #ef4444;">{{ $penerbitanPenulisanSelesai + $penerbitanPenulisanTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #ef4444;">{{ $penerbitanPenulisanTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Penerbitan dan Penulisan Kreatif</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Selesai</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $penerbitanPenulisanSelesai }}</span>
                                     </div>
                                     <div>
-                                        <span class="text-muted small">Tidak Berjaya</span>
+                                        <span class="text-muted small">Dalam Tindakan</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $penerbitanPenulisanTidakBerjaya }}</span>
                                     </div>
                                 </div>
@@ -261,14 +261,14 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.inovasipengkomersilan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #3b82f6;">{{ $inovasiPengkomersilanSelesai + $inovasiPengkomersilanTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #3b82f6;">{{ $inovasiPengkomersilanTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Inovasi dan Pengkomersilan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Selesai</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $inovasiPengkomersilanSelesai }}</span>
                                     </div>
                                     <div>
-                                        <span class="text-muted small">Tidak Berjaya</span>
+                                        <span class="text-muted small">Dalam Tindakan</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $inovasiPengkomersilanTidakBerjaya }}</span>
                                     </div>
                                 </div>
@@ -279,14 +279,14 @@
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card shadow h-100 py-3 card-clickable" onclick="window.location.href='{{ route('admin.penyelidikankeusahawanan') }}'">
                                 <div class="card-body text-center">
-                                    <h1 class="font-weight-bold mb-1" style="color: #8b5cf6;">{{ $penyelidikanKeusahawananSelesai + $penyelidikanKeusahawananTidakBerjaya }}</h1>
+                                    <h1 class="font-weight-bold mb-1" style="color: #8b5cf6;">{{ $penyelidikanKeusahawananTotal }}</h1>
                                     <div class="text-xs font-weight-bold text-dark mb-3">Penyelidikan dan Keusahawanan</div>
                                     <div class="mb-2">
                                         <span class="text-muted small">Selesai</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $penyelidikanKeusahawananSelesai }}</span>
                                     </div>
                                     <div>
-                                        <span class="text-muted small">Tidak Berjaya</span>
+                                        <span class="text-muted small">Dalam Tindakan</span>
                                         <span class="text-warning font-weight-bold ml-2">{{ $penyelidikanKeusahawananTidakBerjaya }}</span>
                                     </div>
                                 </div>
@@ -387,38 +387,38 @@
                 'permohonan': {
                     labels: ['Geran Penyelidikan', 'Geran Padanan', 'Geran Industri', 'Perundingan', 'Kajian Kes', 'MoA/MoU'],
                     values: [
-                        {{ $geranPenyelidikanLulus + $geranPenyelidikanTidakBerjaya }},
-                        {{ $geranPadananLulus + $geranPadananTidakBerjaya }},
-                        {{ $geranIndustriLulus + $geranIndustriTidakBerjaya }},
-                        {{ $perundinganLulus + $perundinganTidakBerjaya }},
-                        {{ $kajianKesLulus + $kajianKesTidakBerjaya }},
-                        {{ $moaMouLulus + $moaMouTidakBerjaya }}
+                        {{ $geranPenyelidikanTotal }},
+                        {{ $geranPadananTotal }},
+                        {{ $geranIndustriTotal }},
+                        {{ $perundinganTotal }},
+                        {{ $kajianKesTotal }},
+                        {{ $moaMouTotal }}
                     ],
                     colors: ['#C86CB7', '#fbbf24', '#ec4899', '#10b981', '#6366f1', '#f97316']
                 },
                 'pelaporan': {
                     labels: ['Global & Antarabangsa', 'Penerbitan', 'Inovasi', 'Penyelidikan'],
                     values: [
-                        {{ $globalAntarabangsaSelesai + $globalAntarabangsaTidakBerjaya }},
-                        {{ $penerbitanPenulisanSelesai + $penerbitanPenulisanTidakBerjaya }},
-                        {{ $inovasiPengkomersilanSelesai + $inovasiPengkomersilanTidakBerjaya }},
-                        {{ $penyelidikanKeusahawananSelesai + $penyelidikanKeusahawananTidakBerjaya }}
+                        {{ $globalAntarabangsaTotal }},
+                        {{ $penerbitanPenulisanTotal }},
+                        {{ $inovasiPengkomersilanTotal }},
+                        {{ $penyelidikanKeusahawananTotal }}
                     ],
                     colors: ['#6366f1', '#ef4444', '#3b82f6', '#8b5cf6']
                 },
                 'all': {
                     labels: ['Geran Penyelidikan', 'Geran Padanan', 'Geran Industri', 'Perundingan', 'Kajian Kes', 'MoA/MoU', 'Global', 'Penerbitan', 'Inovasi', 'Penyelidikan'],
                     values: [
-                        {{ $geranPenyelidikanLulus + $geranPenyelidikanTidakBerjaya }},
-                        {{ $geranPadananLulus + $geranPadananTidakBerjaya }},
-                        {{ $geranIndustriLulus + $geranIndustriTidakBerjaya }},
-                        {{ $perundinganLulus + $perundinganTidakBerjaya }},
-                        {{ $kajianKesLulus + $kajianKesTidakBerjaya }},
-                        {{ $moaMouLulus + $moaMouTidakBerjaya }},
-                        {{ $globalAntarabangsaSelesai + $globalAntarabangsaTidakBerjaya }},
-                        {{ $penerbitanPenulisanSelesai + $penerbitanPenulisanTidakBerjaya }},
-                        {{ $inovasiPengkomersilanSelesai + $inovasiPengkomersilanTidakBerjaya }},
-                        {{ $penyelidikanKeusahawananSelesai + $penyelidikanKeusahawananTidakBerjaya }}
+                        {{ $geranPenyelidikanTotal }},
+                        {{ $geranPadananTotal }},
+                        {{ $geranIndustriTotal }},
+                        {{ $perundinganTotal }},
+                        {{ $kajianKesTotal }},
+                        {{ $moaMouTotal }},
+                        {{ $globalAntarabangsaTotal }},
+                        {{ $penerbitanPenulisanTotal }},
+                        {{ $inovasiPengkomersilanTotal }},
+                        {{ $penyelidikanKeusahawananTotal }}
                     ],
                     colors: ['#C86CB7', '#fbbf24', '#ec4899', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#8b5cf6', '#f97316', '#6366f1']
                 }
@@ -436,7 +436,7 @@
                     ]
                 },
                 'pelaporan': {
-                    labels: ['Selesai', 'Tidak Berjaya'],
+                    labels: ['Selesai', 'Dalam Tindakan'],
                     values: [
                         {{ $globalAntarabangsaSelesai + $penerbitanPenulisanSelesai + 
                            $inovasiPengkomersilanSelesai + $penyelidikanKeusahawananSelesai }},
@@ -445,7 +445,7 @@
                     ]
                 },
                 'all': {
-                    labels: ['Lulus/Selesai', 'Tidak Berjaya'],
+                    labels: ['Lulus/Selesai', 'Tidak Berjaya/Dalam Tindakan'],
                     values: [
                         {{ $geranPenyelidikanLulus + $geranPadananLulus + $geranIndustriLulus + 
                            $perundinganLulus + $kajianKesLulus + $moaMouLulus +

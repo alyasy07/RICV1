@@ -63,6 +63,20 @@ $routePrefix = function($route) {
         /* Button styling */
         .btn-edit {
             color: #fff;
+            background-color: #5a6c7d;
+            border-color: #5a6c7d;
+        }
+        
+        /* Submit button loading state */
+        .btn.submitting {
+            opacity: 0.7;
+            cursor: not-allowed !important;
+            pointer-events: auto;
+        }
+        
+        .btn.submitting:hover {
+            opacity: 0.7;
+        }
             background-color: #36b9cc;
             border-color: #36b9cc;
         }
@@ -435,6 +449,15 @@ $routePrefix = function($route) {
           data: function(d) {
             d.date_from = $('#dateFrom').val();
             d.date_to = $('#dateTo').val();
+          },
+          error: function(xhr, error, thrown) {
+            console.error('DataTables AJAX Error:', {
+              status: xhr.status,
+              error: error,
+              thrown: thrown,
+              responseText: xhr.responseText
+            });
+            alert('Error loading data: ' + xhr.status + ' - ' + error + '\nCheck browser console for details.');
           }
         },
         columns: [
@@ -503,12 +526,25 @@ $routePrefix = function($route) {
         ]
       });
 
-      // Handle form submission
+      // Handle form submission with double-click protection
       $('#geranForm').on('submit', function(e) {
         e.preventDefault();
         
-        var formData = $(this).serialize();
-        var id = $(this).attr('data-id');
+        // Prevent multiple submissions
+        var $submitBtn = $(this).find('button[type="submit"]');
+        var $form = $(this);
+        
+        if ($submitBtn.hasClass('submitting')) {
+          return false; // Already submitting, ignore
+        }
+        
+        // Disable submit button and show loading state
+        $submitBtn.addClass('submitting').prop('disabled', true);
+        var originalText = $submitBtn.html();
+        $submitBtn.html('<i class="fas fa-spinner fa-spin"></i> Menyimpan...');
+        
+        var formData = $form.serialize();
+        var id = $form.attr('data-id');
         var url = id ? '{{ url("admin/geran-penyelidikan") }}/' + id : '{{ route("admin.geranpenyelidikan.store") }}';
         var method = id ? 'PUT' : 'POST';
         
@@ -522,13 +558,21 @@ $routePrefix = function($route) {
           data: formData,
           success: function(result) {
             $('#addGeranModal').modal('hide');
-            $('#geranForm')[0].reset();
+            $form[0].reset();
             $('#successMessage').html(id ? 'Permohonan berjaya dikemaskini.' : 'Permohonan berjaya disimpan.');
             $('#successModal').modal('show');
             $('#filesTable').DataTable().ajax.reload();
           },
           error: function(xhr) {
-            alert('Ralat berlaku. Sila cuba lagi.');
+            var errorMsg = 'Ralat berlaku. Sila cuba lagi.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMsg = xhr.responseJSON.message;
+            }
+            alert(errorMsg);
+          },
+          complete: function() {
+            // Re-enable submit button
+            $submitBtn.removeClass('submitting').prop('disabled', false).html(originalText);
           }
         });
       });
@@ -630,8 +674,13 @@ $routePrefix = function($route) {
       // Reset modal when closed
       $('#addGeranModal').on('hidden.bs.modal', function() {
         $('#addGeranModalLabel').text('Tambah Permohonan Geran Penyelidikan');
-        $('#geranForm').removeAttr('data-id');
-        $('#geranForm')[0].reset();
+        var $form = $('#geranForm');
+        $form.removeAttr('data-id');
+        $form[0].reset();
+        
+        // Reset submit button state
+        var $submitBtn = $form.find('button[type="submit"]');
+        $submitBtn.removeClass('submitting').prop('disabled', false).html('Simpan');
       });
 
       // Filter by year
