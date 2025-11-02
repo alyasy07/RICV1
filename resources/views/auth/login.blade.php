@@ -385,7 +385,7 @@
                 
                 <div class="system-title">
                     <h1>SISTEM<br>PENGURUSAN<br>LAPORAN</h1>
-                    <p class="subtitle">KETERANGAN WEBSITE</p>
+                  
                 </div>
 
                 <img src="{{ asset('images/logo-geric.png') }}" alt="GERIC Logo" class="geric-logo">
