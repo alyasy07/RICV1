@@ -19,7 +19,7 @@ class WelcomeController extends Controller
         }
         
         // Get statistics for the welcome page
-        $totalUsers = NewUser::count();
+        $totalUsers = User::count();
         $totalCanvases = Canvas::count();
 
         return view('welcome', compact('totalUsers', 'totalCanvases'));
