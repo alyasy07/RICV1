@@ -1,0 +1,115 @@
+/* Global Layout Optimization - Compact Spacing Theme */
+* {
+    box-sizing: border-box;
+}
+
+/* Override default Tailwind max-widths for better screen utilization */
+.max-w-7xl {
+    max-width: 80rem !important; /* Reduced from 80rem to 72rem */
+}
+
+.max-w-6xl {
+    max-width: 72rem !important; /* Reduced from 72rem to 64rem */
+}
+
+.max-w-5xl {
+    max-width: 64rem !important; /* Reduced from 64rem to 56rem */
+}
+
+/* Reduce excessive horizontal padding */
+.px-4 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+}
+
+.sm\\:px-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.lg\\:px-8 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+}
+
+/* Optimize container spacing */
+.container {
+    max-width: 1200px !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    .px-4 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
+
+/* Grid optimization for better screen usage */
+.grid {
+    gap: 1rem !important;
+}
+
+.gap-6 {
+    gap: 1rem !important;
+}
+
+.gap-8 {
+    gap: 1.25rem !important;
+}
+
+/* Margin optimizations */
+.mb-8 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mb-10 {
+    margin-bottom: 2rem !important;
+}
+
+.py-8 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+}
+
+.py-10 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+}
+
+/* Card and component spacing */
+.space-y-5 > * + * {
+    margin-top: 1rem !important;
+}
+
+.space-y-6 > * + * {
+    margin-top: 1.25rem !important;
+}
+
+/* Better utilization of screen width */
+@media (min-width: 1024px) {
+    .lg\\:grid-cols-4 {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+    
+    .lg\\:grid-cols-3 {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Specific dashboard optimizations */
+.bg-white.rounded-xl.shadow-md.p-6 {
+    padding: 1.25rem !important;
+}
+
+/* Header height optimization */
+.h-16 {
+    height: 3.5rem !important;
+}

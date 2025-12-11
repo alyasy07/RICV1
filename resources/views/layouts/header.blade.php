@@ -1,146 +1,268 @@
-<!-- Custom Admin Button Styles -->
+@php
+    use Illuminate\Support\Facades\Auth;
+@endphp
+
 <style>
-    .admin-button {
-        background-color: #4e73df;
-        color: white !important;
-        border-radius: 5px;
-        padding: 6px 14px !important;
-        transition: all 0.2s ease;
-        box-shadow: 0 1px 2px rgba(78, 115, 223, 0.2);
-        font-weight: 400;
-        border: none;
-        font-size: 0.85rem;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        margin: 0;
-    }
-    
-    .admin-button:hover, .admin-button:focus {
-        background-color: #375bc8;
-        box-shadow: 0 2px 4px rgba(78, 115, 223, 0.3);
-        transform: translateY(-1px);
-    }
-    
-    .admin-button i {
-        font-size: 0.75rem;
-    }
-    
-    /* Override Bootstrap dropdown toggle arrow */
-    .admin-button::after {
-        display: none;
-    }
-    
-    @media (max-width: 768px) {
-        .admin-button {
-            padding: 5px 10px !important;
-            font-size: 0.8rem;
-            height: 30px;
-        }
-    }
-    
-    /* Enhanced dropdown menu styles */
-    .dropdown-menu-right {
-        min-width: 200px;
-        border: none;
-        border-radius: 0.5rem;
+    .logout-btn {
+        transition: all 0.3s ease;
+        position: relative;
         overflow: hidden;
     }
-    
-    .dropdown-menu-right .dropdown-item {
-        padding: 0.75rem 1.5rem;
-        transition: background-color 0.2s;
+
+    .logout-btn:hover {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+        color: white !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
-    
-    .dropdown-menu-right .dropdown-item:hover {
-        background-color: #eaecf4;
+
+    .logout-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
     }
-    
-    .dropdown-menu-right .dropdown-item i {
-        color: #4e73df;
-        margin-right: 0.75rem;
+
+    .logout-btn:active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .profile-btn {
+        transition: all 0.3s ease;
+    }
+
+    .profile-btn:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Logout Confirmation Modal */
+    .logout-modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .logout-modal-overlay.active {
+        display: flex;
+    }
+
+    .logout-modal {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        position: relative;
+    }
+
+    .logout-modal-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #dc2626;
+        font-size: 1.8rem;
+    }
+
+    .logout-modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        text-align: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .logout-modal-message {
+        color: #6b7280;
+        text-align: center;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .logout-modal-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .logout-modal-btn {
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .logout-modal-btn-cancel {
+        background: #e5e7eb;
+        color: #374151;
+    }
+
+    .logout-modal-btn-cancel:hover {
+        background: #d1d5db;
+        transform: translateY(-1px);
+    }
+
+    .logout-modal-btn-confirm {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .logout-modal-btn-confirm:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
-<!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="min-height: 60px;">
-    <!-- Sidebar Toggle (Topbar) -->
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-    </button>
-
-    <!-- Logo -->
-    <div class="d-none d-sm-inline-block ml-md-3 my-2 my-md-0 mw-100">
-        <a href="{{ url('/') }}" class="text-decoration-none">
-            <img src="{{ asset('images/logo-geric.png') }}" alt="GERIC Logo" height="32" style="max-width: 180px; object-fit: contain;">
-        </a>
-    </div>
-
-    <!-- Topbar Navbar -->
-    <ul class="navbar-nav ml-auto" style="height: 100%; display: flex; align-items: center;">
-        <!-- Divider -->
-        <div class="topbar-divider d-none d-sm-block"></div>
-        
-        <!-- User Information -->
-        <li class="nav-item dropdown no-arrow">
-            <a class="dropdown-toggle d-flex align-items-center admin-button" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                @if(Auth::user()->profilePicture)
-                <img class="rounded-circle mr-2" src="{{ asset('images/' . Auth::user()->profilePicture) }}" width="20" height="20">
-                @else
-                <i class="fas fa-user-circle mr-2" style="font-size: 0.9rem;"></i>
-                @endif
-                <span class="d-none d-lg-inline">{{ Auth::user()->username }}</span>
-                <i class="fas fa-chevron-down ml-2" style="font-size: 0.75rem;"></i>
-            </a>
-            <!-- Dropdown – User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <div class="px-3 py-2 text-center border-bottom">
-                    <span class="d-block text-gray-600 font-weight-bold">{{ Auth::user()->username }}</span>
-                    <small class="text-gray-500">{{ Auth::user()->email }}</small>
+<header class="bg-white shadow-sm">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div class="flex justify-between items-center h-16">
+            
+            <div class="flex items-center space-x-8">
+                <div class="flex-shrink-0">
+                    <a href="{{ route('dashboard') }}" class="text-2xl font-bold">
+                        <span class="text-blue-800">Reasearch </span><span class="text-blue-500">Ideation</span>
+                    </a>
                 </div>
-                <a class="dropdown-item" href="{{ route('admin.manageProfile') }}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2"></i>
-                    Profil Saya
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
-                    Log Keluar
-                </a>
-            </div>
-        </li>
-    </ul>
-</nav>
-<!-- End of Topbar -->
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0">
-            <div class="modal-header bg-gradient-primary text-white">
-                <h5 class="modal-title font-weight-bold">Log Keluar Sistem</h5>
-                <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body py-4">
-                <div class="text-center mb-3">
-                    <i class="fas fa-sign-out-alt fa-3x text-gray-300 mb-3"></i>
-                    <h5>Adakah anda pasti untuk log keluar?</h5>
-                    <p class="text-gray-600">Pilih "Log Keluar" jika anda ingin menamatkan sesi anda.</p>
+                
+                <div class="hidden md:block">
+                    <div class="flex items-baseline space-x-4">
+                        @if(Auth::check() && Auth::user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" 
+                               class="{{ request()->routeIs('admin.dashboard') ? 'header-active' : 'text-gray-600 hover:text-blue-700' }} px-3 py-2 rounded-md text-sm font-medium">
+                                Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" 
+                               class="{{ request()->routeIs('dashboard') || request()->routeIs('home') ? 'header-active' : 'text-gray-600 hover:text-blue-700' }} px-3 py-2 rounded-md text-sm font-medium">
+                                Dashboard
+                            </a>
+                        @endif
+                        <a href="{{ route('canvas.index') }}" 
+                           class="{{ request()->routeIs('canvas.*') ? 'header-active' : 'text-gray-600 hover:text-blue-700' }} px-3 py-2 rounded-md text-sm font-medium">
+                            My Canvas
+                        </a>
+                        @if(Auth::check() && Auth::user()->isAdmin())
+                            <a href="{{ route('admin.references.index') }}" 
+                               class="{{ request()->routeIs('admin.references.*') ? 'header-active' : 'text-gray-600 hover:text-blue-700' }} px-3 py-2 rounded-md text-sm font-medium">
+                                References
+                            </a>
+                        @else
+                            <a href="{{ route('references.index') }}" 
+                               class="{{ request()->routeIs('references.*') && !request()->routeIs('admin.*') ? 'header-active' : 'text-gray-600 hover:text-blue-700' }} px-3 py-2 rounded-md text-sm font-medium">
+                                References
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer bg-light">
-                <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">
-                    <i class="fas fa-times mr-1"></i> Batal
-                </button>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-out-alt mr-1"></i> Log Keluar
+
+            <div class="hidden md:block">
+                <div class="ml-4 flex items-center md:ml-6 space-x-4">
+                    <a href="{{ route('manageProfile') }}" 
+                       class="profile-btn text-gray-700 hover:bg-gray-200 hover:text-black px-3 py-2 rounded-md text-sm font-medium">
+                        Profile
+                    </a>
+                    
+                    <button type="button" onclick="showLogoutModal()" 
+                            class="logout-btn text-gray-700 hover:bg-gray-200 hover:text-black px-3 py-2 rounded-md text-sm font-medium">
+                        Logout
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+</header>
+
+<!-- Logout Confirmation Modal -->
+<div id="logoutModal" class="logout-modal-overlay">
+    <div class="logout-modal">
+        <div class="logout-modal-icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <h3 class="logout-modal-title">Confirm Logout</h3>
+        <p class="logout-modal-message">Are you sure you want to logout? You will need to login again to access your account.</p>
+        <div class="logout-modal-actions">
+            <button type="button" onclick="hideLogoutModal()" class="logout-modal-btn logout-modal-btn-cancel">
+                Cancel
+            </button>
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" class="logout-modal-btn logout-modal-btn-confirm">
+                    Yes, Logout
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
+
+<script>
+function showLogoutModal() {
+    document.getElementById('logoutModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function hideLogoutModal() {
+    document.getElementById('logoutModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+document.getElementById('logoutModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideLogoutModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideLogoutModal();
+    }
+});
+</script>

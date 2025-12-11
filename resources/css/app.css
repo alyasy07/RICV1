@@ -5,3 +5,39 @@
 [x-cloak] {
     display: none;
 }
+
+:root {
+    --primary-blue: #0046BE;
+    --secondary-blue: #0038A5;
+    --light-blue: #E8F0FE;
+    --accent-blue: #0066FF;
+    --dark-blue: #002F87;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-primary {
+    @apply bg-[var(--primary-blue)] text-white transition-all duration-300;
+}
+
+.btn-primary:hover {
+    @apply bg-[var(--secondary-blue)] transform -translate-y-0.5 shadow-lg;
+}
+
+.canvas-card {
+    @apply transition-all duration-300 border-l-4 border-[var(--primary-blue)];
+}
+
+.canvas-card:hover {
+    @apply transform -translate-y-0.5 shadow-lg;
+}
+
+.stat-card {
+    @apply bg-gradient-to-br from-[var(--primary-blue)] to-[var(--accent-blue)] text-white;
+}
+
+.header-active {
+    @apply bg-[var(--light-blue)] text-[var(--primary-blue)];
+}

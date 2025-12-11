@@ -9,7 +9,7 @@ class SetLocale
 {
     public function handle($request, Closure $next)
     {
-        $locale = Session::get('locale', 'ms');
+        $locale = Session::get('locale', 'en');
         App::setLocale($locale);
         return $next($request);
     }

@@ -48,6 +48,11 @@ class User extends Model implements Authenticatable, CanResetPassword
         return $this->userStatus === 'Aktif';
     }
 
+    public function isAdmin()
+    {
+        return strtolower($this->role) === 'admin';
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);

@@ -1,19 +1,38 @@
 <?php
+require __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
 
-use App\Models\User;
+use App\Models\NewUser;
 use Illuminate\Support\Facades\Hash;
 
-// Generate a unique userID for the admin
-$userID = 'ADMIN' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+// Delete existing admin if exists
+NewUser::where('email', 'admin@admin.com')->delete();
 
-$user = new User();
-$user->userID = $userID;
-$user->username = 'admin1';
-$user->icNumber = '000000000000'; // Placeholder IC number
-$user->email = 'admin1@gmail.com';
-$user->role = 'Admin';
-$user->password = 'rudyykim'; // Will be automatically hashed by the model
-$user->userStatus = 'Aktif';
+// Delete any existing users with this email
+NewUser::where('email', 'admin@admin.com')->delete();
+
+$password = 'admin123';
+$hash = Hash::make($password);
+
+$user = new NewUser();
+$user->name = 'Administrator';
+$user->email = 'admin@admin.com';
+$user->password = $hash;
+$user->role = 'admin';
 $user->save();
 
-echo "User created successfully with userID: {$userID}\n";
+// Verify the password hash
+if (Hash::check($password, $hash)) {
+    echo "Password hash verification successful!\n";
+} else {
+    echo "WARNING: Password hash verification failed!\n";
+}
+
+// Output the hash for verification
+echo "Password Hash: " . $hash . "\n";
+
+echo "Admin user created successfully!\n";
+echo "Email: admin@admin.com\n";
+echo "Password: admin123\n";

@@ -28,6 +28,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        // Independent new auth guard (separate from existing Fortify/Jetstream)
+        'newweb' => [
+            'driver' => 'session',
+            'provider' => 'new_users',
+        ],
     ],
 
     /*
@@ -40,6 +46,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
             'table' => 'user',
+        ],
+
+        // Provider for the independent new auth system
+        'new_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\NewUser::class,
+            'table' => 'new_users',
         ],
 
         // Uncomment if you need secondary user provider
@@ -58,6 +71,12 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'new_users' => [
+            'provider' => 'new_users',
+            'table' => 'new_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

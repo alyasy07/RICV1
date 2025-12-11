@@ -46,6 +46,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         // Middleware aliases are now registered in bootstrap/app.php
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 
     // app/Console/Kernel.php
