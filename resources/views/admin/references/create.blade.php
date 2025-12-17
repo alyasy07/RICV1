@@ -580,6 +580,8 @@ function toggleReferenceType() {
     const urlField = document.getElementById('urlField');
     const fileInput = document.getElementById('file');
     const urlInput = document.getElementById('url');
+    const fileThumbnailInput = document.getElementById('thumbnail');
+    const linkThumbnailInput = document.getElementById('linkThumbnail');
     
     if (referenceType === 'file') {
         fileSection.style.display = 'block';
@@ -588,6 +590,10 @@ function toggleReferenceType() {
         fileInput.required = true;
         urlInput.required = false;
         urlInput.value = '';
+        // Enable file thumbnail, disable link thumbnail
+        fileThumbnailInput.disabled = false;
+        linkThumbnailInput.disabled = true;
+        linkThumbnailInput.value = '';
     } else {
         fileSection.style.display = 'none';
         linkThumbnailSection.style.display = 'block';
@@ -597,6 +603,10 @@ function toggleReferenceType() {
         // Clear file input
         fileInput.value = '';
         document.getElementById('fileInfo').style.display = 'none';
+        // Enable link thumbnail, disable file thumbnail
+        fileThumbnailInput.disabled = true;
+        fileThumbnailInput.value = '';
+        linkThumbnailInput.disabled = false;
     }
 }
 
@@ -620,6 +630,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const linkThumbnailInput = document.getElementById('linkThumbnail');
     const linkThumbnailDropZone = document.getElementById('linkThumbnailDropZone');
     const linkThumbnailPreview = document.getElementById('linkThumbnailPreview');
+
+    // Initialize: Enable file thumbnail, disable link thumbnail on page load
+    thumbnailInput.disabled = false;
+    linkThumbnailInput.disabled = true;
 
     // File drop zone events
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {

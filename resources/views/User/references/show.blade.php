@@ -163,68 +163,67 @@
         background: var(--white);
         border-radius: var(--border-radius);
         box-shadow: var(--shadow-md);
-        padding: 1.25rem 1.5rem !important;
+        padding: 1.5rem 2rem !important;
         margin-bottom: 1.25rem !important;
     }
 
     .actions-title {
-        font-size: 1.2rem !important;
+        font-size: 1.1rem !important;
         font-weight: 700;
         color: var(--text-dark);
-        margin-bottom: 1rem !important;
+        margin-bottom: 1.25rem !important;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
 
     .actions-grid {
-        display: flex;
+        display: flex !important;
+        flex-direction: row !important;
         gap: 1rem;
         justify-content: center;
-        max-width: 600px;
+        align-items: stretch;
+        max-width: 500px;
         margin: 0 auto;
     }
 
     .actions-grid > a {
         flex: 1;
-        max-width: 250px;
     }
 
     .action-btn {
+        display: flex;
         width: 100%;
-        flex-grow: 1;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
+        align-items: center;
+        justify-content: center;
+        padding: 0.875rem 1.25rem;
+        border-radius: 10px;
         font-weight: 600;
         font-size: 0.95rem;
         border: none;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
+        gap: 0.5rem;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.08);
         white-space: nowrap;
-        min-height: 50px;
         text-align: center;
     }
 
     .btn-download {
-        background: var(--success);
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         color: white;
     }
 
     .btn-back {
         background: var(--white);
-        color: var(--text-dark);
+        color: var(--text-medium);
         border: 2px solid var(--border-color);
     }
 
     .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
         text-decoration: none;
     }
 
@@ -239,9 +238,8 @@
         color: var(--text-dark);
     }
 
-    .action-btn:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: var(--shadow-lg);
+    .action-btn i {
+        font-size: 0.9rem;
     }
 
     .viewer-section {
@@ -360,12 +358,12 @@
         }
         
         .actions-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            flex-direction: row;
+            gap: 0.75rem;
         }
         
         .action-btn {
-            padding: 1.25rem 1rem;
+            padding: 0.875rem 1rem;
             font-size: 0.9rem;
         }
         
@@ -531,11 +529,10 @@
                         </a>
                     </div>
                 </div>
-                <iframe src="{{ asset('vendor/pdfjs/web/viewer.html') }}?file={{ urlencode(route('pdf.serve', $reference)) }}" 
-                        class="viewer-iframe" 
-                        title="PDF Viewer - {{ $reference->title }}"
-                        id="pdfViewer">
-                </iframe>
+                <embed src="{{ asset('storage/' . $reference->file_path) }}" 
+                       type="application/pdf"
+                       class="viewer-iframe" 
+                       title="PDF Viewer - {{ $reference->title }}">
             </div>
         @elseif($reference->reference_type === 'file')
             <div class="viewer-section">

@@ -656,12 +656,14 @@
         <!-- References Grid -->
         <div class="references-grid">
             @forelse($references as $reference)
-                <article class="reference-card">
+                <article class="reference-card" data-ref-id="{{ $reference->id }}" data-has-thumb="{{ $reference->thumbnail_path ? 'yes' : 'no' }}">
                     <div class="card-thumbnail">
                         @if($reference->thumbnail_path)
-                            <img src="{{ asset('storage/' . $reference->thumbnail_path) }}" 
+                            <img src="{{ asset('storage/' . $reference->thumbnail_path) }}?v={{ $reference->updated_at->timestamp }}" 
                                  alt="{{ $reference->title }}" 
-                                 class="thumbnail-image">
+                                 class="thumbnail-image"
+                                 loading="eager"
+                                 onerror="console.error('Image failed to load:', this.src, 'Path:', '{{ $reference->thumbnail_path }}'); this.parentElement.innerHTML='<div class=\'thumbnail-placeholder\'><i class=\'fas fa-image\'></i><small>Image Error</small></div>';">
                         @else
                             <div class="thumbnail-placeholder">
                                 @if($reference->reference_type === 'link')

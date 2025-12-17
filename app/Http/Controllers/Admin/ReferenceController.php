@@ -67,12 +67,32 @@ class ReferenceController extends Controller
         $validated = $request->validate($rules);
 
         $thumbnailPath = null;
+        Log::info('Checking thumbnail upload', [
+            'hasFile' => $request->hasFile('thumbnail'),
+            'allFiles' => array_keys($request->allFiles())
+        ]);
+        
         if ($request->hasFile('thumbnail')) {
             $thumbnailFile = $request->file('thumbnail');
+            Log::info('Thumbnail file found', [
+                'isValid' => $thumbnailFile->isValid(),
+                'originalName' => $thumbnailFile->getClientOriginalName(),
+                'size' => $thumbnailFile->getSize(),
+                'error' => $thumbnailFile->getError()
+            ]);
+            
             if ($thumbnailFile->isValid()) {
-                $thumbnailName = time() . '_thumb_' . $thumbnailFile->getClientOriginalName();
+                // Sanitize filename by replacing spaces and special characters
+                $originalName = $thumbnailFile->getClientOriginalName();
+                $sanitizedName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalName);
+                $thumbnailName = time() . '_thumb_' . $sanitizedName;
                 $thumbnailPath = $thumbnailFile->storeAs('references/thumbnails', $thumbnailName, 'public');
+                Log::info('Thumbnail saved', ['path' => $thumbnailPath]);
+            } else {
+                Log::warning('Thumbnail file is not valid', ['error' => $thumbnailFile->getError()]);
             }
+        } else {
+            Log::info('No thumbnail file in request');
         }
 
         if ($request->reference_type === 'file' && $request->hasFile('file')) {
@@ -91,7 +111,10 @@ class ReferenceController extends Controller
                 return back()->with('error', 'Uploaded file failed to save temporarily. This may be due to server upload limits.');
             }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
+            // Sanitize filename by replacing spaces and special characters
+            $originalFilename = $file->getClientOriginalName();
+            $sanitizedFilename = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalFilename);
+            $filename = time() . '_' . $sanitizedFilename;
 
             try {
                 $path = $file->storeAs('references', $filename, 'public');
@@ -190,7 +213,10 @@ class ReferenceController extends Controller
                 return back()->with('error', 'Uploaded file failed to save temporarily. This may be due to server upload limits.');
             }
 
-            $filename = time() . '_' . $file->getClientOriginalName();
+            // Sanitize filename by replacing spaces and special characters
+            $originalFilename = $file->getClientOriginalName();
+            $sanitizedFilename = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalFilename);
+            $filename = time() . '_' . $sanitizedFilename;
 
             try {
                 $path = $file->storeAs('references', $filename, 'public');
@@ -213,7 +239,10 @@ class ReferenceController extends Controller
             
             $thumbnailFile = $request->file('thumbnail');
             if ($thumbnailFile->isValid()) {
-                $thumbnailName = time() . '_thumb_' . $thumbnailFile->getClientOriginalName();
+                // Sanitize thumbnail filename
+                $originalThumbnailName = $thumbnailFile->getClientOriginalName();
+                $sanitizedThumbnailName = preg_replace('/[^A-Za-z0-9\-_\.]/', '_', $originalThumbnailName);
+                $thumbnailName = time() . '_thumb_' . $sanitizedThumbnailName;
                 $reference->thumbnail_path = $thumbnailFile->storeAs('references/thumbnails', $thumbnailName, 'public');
             }
         }

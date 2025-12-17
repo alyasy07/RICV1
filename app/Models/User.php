@@ -77,5 +77,13 @@ class User extends Model implements Authenticatable, CanResetPassword
 
         return $roleNames[$this->role] ?? $this->role;
     }
+
+    /**
+     * Get the name attribute (alias for username)
+     */
+    public function getNameAttribute()
+    {
+        return $this->username;
+    }
     
 }
