@@ -1,205 +1,274 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="ms" x-data="{
+    darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+    toggle() {
+        this.darkMode = !this.darkMode;
+        localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+    }
+}" :class="{'dark': darkMode}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/bulat_logo2.png') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Set Semula Kata Laluan – {{ config('app.name') }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="180x180" href="{{ asset('images/bulat_logo2.png') }}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Instrument Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-violet': '#6366F1', // Indigo 500
+                        'accent-amber': '#F59E0B', // Amber 500
+                        'bg-light': '#ffffffff', 
+                        'bg-dark': '#0F172A', 
+                        'black': '#000000',
+                    }
+                },
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            background: url('{{ asset('images/welcome_bg.jpg') }}') no-repeat center center fixed;
+        body{
             background-size: cover;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-attachment: fixed;
+            background-image: url('/images/bg.png');
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Animated gradient background for the card */
+        .main-card-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
             position: relative;
         }
         
-        body::before {
-            content: "";
+        .dark .main-card-bg {
+            background: linear-gradient(135deg, #1f2937 0%, #3b1f6e 50%, #111827 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Fun floating shapes */
+        .floating-shape {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            filter: blur(2px);
-            z-index: -1;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
         }
         
-        .reset-container {
-            background-color: rgba(255, 255, 255, 0.6);
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+        
+        /* Glassmorphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .reset-header {
-            text-align: center;
-            margin-bottom: 1.8rem;
+        .dark .glass-card {
+            background: rgba(31, 41, 55, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .reset-header h2 {
-            color: #2c3e50;
-            font-weight: 700;
-            font-size: 1.8rem;
+        /* Button hover effects */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
         
-        .reset-description {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-            text-align: center;
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
         
-        .form-control {
-            height: 48px;
-            border-radius: 6px;
-            margin-bottom: 1.2rem;
-            border: 1px solid #ddd;
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
         }
         
-        .btn-reset {
-            background-color: #4e73df;
-            border: none;
-            color: white;
-            padding: 12px 0;
-            width: 100%;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s;
-            margin-top: 0.5rem;
-        }
-        
-        .btn-reset:hover {
-            background-color: #3a5bd9;
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
         }
         
-        .btn-back {
-            background-color: #6c757d;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 1rem;
-            width: 100%;
-            text-align: center;
+        /* Input focus effects */
+        .input-fancy:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
         }
         
-        .btn-back:hover {
-            background-color: #545b62;
-            color: white;
-            text-decoration: none;
+        /* Logo bounce animation */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
         
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            border-radius: 0.25rem;
-            word-break: break-all;
-        }
-        
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            border-radius: 0.25rem;
-        }
-        
-        .invalid-feedback {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: -0.5rem;
-            margin-bottom: 1rem;
+        .logo-animate:hover {
+            animation: bounce 0.6s ease;
         }
     </style>
 </head>
-<body>
-    <div class="reset-container">
-        <div class="reset-header">
-            <h2>Set Semula Kata Laluan</h2>
-        </div>
+
+<body class="bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-gray-100 font-sans flex items-center justify-center min-h-screen p-4 sm:p-0">
+
+    <!-- Floating decorative shapes -->
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+
+    <div class="w-full max-w-md main-card-bg dark:border-gray-700 dark:shadow-2xl rounded-3xl shadow-2xl overflow-hidden p-1">
         
-        <div class="reset-description">
-            Masukkan alamat emel anda untuk mendapatkan pautan set semula kata laluan.
-        </div>
+        <!-- Inner glass card -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10">
         
+        <!-- Theme Toggle Button -->
+        <div class="flex justify-end mb-4">
+            <button @click="toggle()" id="theme-toggle" class="p-2.5 rounded-full text-primary-violet dark:text-accent-amber bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110" aria-label="Toggle theme">
+                <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex flex-col items-center justify-center mb-8">
+            <a href="/" class="logo-animate inline-block">
+                <img src="/images/UMK.png" alt="UMK Logo" class="h-16 w-auto mb-4 drop-shadow-lg">
+            </a>
+            <h2 class="text-3xl font-extrabold bg-gradient-to-r from-primary-violet to-pink-600 bg-clip-text text-transparent mb-2 text-center">
+                Set Semula Kata Laluan
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">Masukkan alamat emel anda untuk mendapatkan pautan set semula kata laluan.</p>
+        </div>
+
+        <!-- Session Status -->
         @if(session('status'))
-            <div class="alert alert-success">
-                <strong>Pautan Reset:</strong><br>
+            <div class="mb-4 bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-600 text-green-700 dark:text-green-300 px-4 py-3 rounded-xl shadow-inner relative" role="alert">
+                <strong class="font-bold">Pautan Reset:</strong><br>
                 @php
                     $statusText = session('status');
                     $resetUrl = substr($statusText, strpos($statusText, 'http'));
                 @endphp
-                <a href="{{ $resetUrl }}" target="_blank" class="text-decoration-none">
+                <a href="{{ $resetUrl }}" target="_blank" class="block mt-1 underline break-all hover:text-green-800 dark:hover:text-green-200">
                     {{ $resetUrl }}
                 </a>
-                <br><small class="text-muted">Klik pautan di atas untuk set semula kata laluan.</small>
+                <span class="block text-xs mt-1 opacity-75">Klik pautan di atas untuk set semula kata laluan.</span>
             </div>
         @endif
-        
+
         @if($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
+            <div class="mb-4 bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl relative text-sm" role="alert">
+                <ul class="list-disc pl-5">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
-        
-        <form method="POST" action="{{ route('simple.password.email') }}">
-            @csrf
-            
-            <div class="mb-3">
-                <label for="email" class="form-label">Alamat Emel</label>
-                <input 
-                    type="email" 
-                    class="form-control @error('email') is-invalid @enderror" 
-                    id="email" 
-                    name="email" 
-                    value="{{ old('email') }}"
-                    placeholder="Masukkan emel anda" 
-                    required
-                    autofocus
-                >
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            
-            <button type="submit" class="btn btn-reset">Dapatkan Pautan Reset</button>
-            
-            <a href="{{ route('login') }}" class="btn-back">Kembali ke Log Masuk</a>
-        </form>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <form method="POST" action="{{ route('simple.password.email') }}" class="space-y-6">
+            @csrf
+
+            <!-- Email Address -->
+            <div>
+                <x-input-label for="email" value="Alamat Emel" class="text-gray-700 dark:text-gray-300 font-semibold"/>
+                <x-text-input 
+                    id="email" 
+                    class="input-fancy block mt-2 w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700/50 dark:text-white focus:border-primary-violet focus:ring-primary-violet dark:focus:border-primary-violet dark:focus:ring-primary-violet rounded-xl shadow-sm transition-all duration-300" 
+                    type="email" 
+                    name="email" 
+                    :value="old('email')" 
+                    required 
+                    autofocus 
+                    placeholder="Masukkan emel anda" 
+                />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-2">
+                <button type="submit" class="btn-primary w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary-violet to-purple-600 border border-transparent rounded-xl font-bold text-base text-white uppercase tracking-wide hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-primary-violet/50 transition-all duration-300 shadow-lg">
+                    <span class="relative z-10">Dapatkan Pautan Reset</span>
+                </button>
+            </div>
+
+            <!-- Back to Login -->
+            <div class="text-center pt-2">
+                <a href="{{ route('login') }}" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary-violet dark:text-gray-400 dark:hover:text-white transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali ke Log Masuk
+                </a>
+            </div>
+        </form>
+        
+        </div>
+    </div>
 </body>
 </html>

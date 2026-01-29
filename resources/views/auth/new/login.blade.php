@@ -239,8 +239,8 @@
                     <span class="ms-2 text-sm text-gray-600 dark:text-gray-400 group-hover:text-primary-violet transition-colors">{{ __('Remember me') }}</span>
                 </label>
 
-                @if (Route::has('password.request'))
-                    <a class="text-sm text-primary-violet dark:text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-300 font-medium transition-colors" href="{{ route('password.request') }}">
+                @if (\Illuminate\Support\Facades\Route::has('new.password.request'))
+                    <a class="text-sm text-primary-violet dark:text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-300 font-medium transition-colors" href="{{ route('new.password.request') }}">
                         {{ __('Forgot password?') }}
                     </a>
                 @endif

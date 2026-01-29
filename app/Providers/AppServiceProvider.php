@@ -34,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         view()->share('routePrefix', function($routeName) {
             return 'admin.' . $routeName;
         });
+
     }
 }

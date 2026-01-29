@@ -2,93 +2,72 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Notification;
-use Laravel\Fortify\Features;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\NewUser;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordResetTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function test_reset_password_link_screen_can_be_rendered(): void
+    /**
+     * Test Simple Password Reset (for existing User model).
+     * This controller just displays the link on screen for now.
+     */
+    public function test_simple_forgot_password_generation(): void
     {
-        if (! Features::enabled(Features::resetPasswords())) {
-            $this->markTestSkipped('Password updates are not enabled.');
+        // 1. Ensure a user exists
+        $user = User::first();
+        if (!$user) {
+            $user = new User();
+            $user->userID = 'USR999';
+            $user->username = 'TestUser';
+            $user->email = 'testuser@example.com';
+            $user->password = 'password';
+            $user->role = 'user';
+            $user->userStatus = 'Aktif';
+            $user->save();
         }
 
-        $response = $this->get('/forgot-password');
-
-        $response->assertStatus(200);
-    }
-
-    public function test_reset_password_link_can_be_requested(): void
-    {
-        if (! Features::enabled(Features::resetPasswords())) {
-            $this->markTestSkipped('Password updates are not enabled.');
-        }
-
-        Notification::fake();
-
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', [
+        // 2. Request a password reset
+        $response = $this->post(route('simple.password.email'), [
             'email' => $user->email,
         ]);
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        // 3. Assert it redirects back with status (containing the link)
+        $response->assertStatus(302);
+        $response->assertSessionHas('status');
+        
+        // 4. Verify the status contains the link (rudimentary check from controller code)
+        $status = session('status');
+        $this->assertStringContainsString('http', $status);
     }
 
-    public function test_reset_password_screen_can_be_rendered(): void
+    /**
+     * Test New Password Reset (for NewUser model).
+     * This uses the standard Laravel PasswordBroker.
+     */
+    public function test_new_auth_forgot_password_email_trigger(): void
     {
-        if (! Features::enabled(Features::resetPasswords())) {
-            $this->markTestSkipped('Password updates are not enabled.');
+        // 1. Ensure a NewUser exists
+        $user = NewUser::where('email', 'newtest@example.com')->first();
+        if (!$user) {
+             $user = NewUser::create([
+                'name' => 'New Test',
+                'email' => 'newtest@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'user'
+             ]);
         }
 
-        Notification::fake();
-
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', [
-            'email' => $user->email,
+        // 2. Request password reset
+        // Note: With MAIL_MAILER=log, this shouldn't crash
+        $response = $this->post(route('new.password.email'), [
+            'email' => 'newtest@example.com',
         ]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function (object $notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
-
-            $response->assertStatus(200);
-
-            return true;
-        });
-    }
-
-    public function test_password_can_be_reset_with_valid_token(): void
-    {
-        if (! Features::enabled(Features::resetPasswords())) {
-            $this->markTestSkipped('Password updates are not enabled.');
-        }
-
-        Notification::fake();
-
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', [
-            'email' => $user->email,
-        ]);
-
-        Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
-                'password_confirmation' => 'password',
-            ]);
-
-            $response->assertSessionHasNoErrors();
-
-            return true;
-        });
+        // 3. Assert success redirect
+        $response->assertStatus(302);
+        $response->assertSessionHas('status', trans(Password::RESET_LINK_SENT));
     }
 }

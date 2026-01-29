@@ -265,7 +265,7 @@
         <main class="p-8 lg:p-16 text-center relative z-10">
             
             <span class="text-sm font-semibold uppercase tracking-widest text-primary-violet dark:text-indigo-300 mb-2 block">
-                Entrepreneurship Research Hub
+                Cre8tivation Lab
             </span>
 
             <h1 class="text-5xl lg:text-6xl font-extrabold mb-4 bg-gradient-to-r from-primary-violet via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
@@ -318,7 +318,7 @@
         
         <!-- Footer / Branding -->
         <footer class="p-6 lg:p-8 text-xs text-center text-gray-400 border-t border-gray-200 dark:border-gray-700 mt-10">
-            &copy; 2025 Global Entrepreneurship Research and Innovation Centre. All rights reserved.
+            &copy; 2025 Cre8tivation Lab. All rights reserved.
         </footer>
         
         </div>
