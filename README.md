@@ -15,6 +15,44 @@
 *   **Secure Password Recovery**: Fully functional password reset system for all user types.
 *   **PDF Viewer**: Integrated PDF viewing capabilities for research references.
 
+## 📘 User Guide
+
+### 🛡️ Admin Manual
+
+The Admin panel provides centralized control over the platform's resources and user monitoring.
+
+#### 1. Accessing the Admin Dashboard
+*   **Login**: Use your administrator credentials to access the system.
+*   **Dashboard**: Navigate to `/admin/dashboard` to view the system overview and quick stats.
+
+#### 2. Managing References
+Admins can curate the library of research materials available to students.
+*   **View Library**: Go to the **Reference Management** section (`/admin/references`) to see all uploaded materials.
+*   **Add Resources**: Upload new PDFs or add research links for users to access.
+*   **Edit/Delete**: Update reference metadata or remove outdated resources from the system.
+
+#### 3. Monitoring Activity
+*   **Recent Canvases**: Check `/admin/recent-canvases` to review the latest research canvases created by users.
+
+### 🎓 Researcher (Student) Manual
+
+Designed to help you organize and develop your research ideas effectively.
+
+#### 1. Getting Started
+*   **Sign Up**: Create an account at `/new-auth/register`.
+*   **Login**: Access your dashboard via the secure login page at `/new-auth/login`.
+*   **Profile**: Manage your account details and profile picture at `/profile`.
+
+#### 2. Research Canvas
+This is your primary workspace for ideation.
+*   **Create New**: Start a fresh canvas (`/canvas/create`) or use a pre-defined **Template** (`/templates`) to guide your research.
+*   **My Canvases**: View all your ongoing and completed projects in the **My Canvases** list (`/mycanvas`).
+*   **Edit & Export**: Click on any canvas to update its content. When finished, you can **Export** it for submission or printing.
+
+#### 3. Resource 
+*   **Access**: Visit the **Reference** (`/references`) to browse materials provided by instructors/admins.
+*   **Study**: View documents directly in the integrated PDF viewer or download them to your device.
+
 ## 🛠 Technology Stack
 
 *   **Backend**: [Laravel 12](https://laravel.com) (PHP 8.2+)
